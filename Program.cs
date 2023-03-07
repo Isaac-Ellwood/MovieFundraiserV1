@@ -7,16 +7,17 @@ namespace MovieFundraiserV1
     {
         static void Main(string[] args)
         {
+            const float TICKETPRICE = 10.50f;
+
             List<string> snacksAvailable = new List<string>() {"popcorn","corn","chips"};
             List<float> snackPrices = new List<float>() { 1f, 2f, 1.5f};
             
-            List<string> drinksAvailable = new List<string>() {"coke","cocoa cola","refined cola"};
-            List<float> drinkPrices = new List<float>() { 100f, 2f, 2.5f};
+            List<string> drinksAvailable = new List<string>() {"sprite","cocoa cola","fanta"};
+            List<float> drinkPrices = new List<float>() { 3f, 2f, 2.5f};
 
-            Console.WriteLine("Hello World!");
-            TicketHolder testTH = new TicketHolder("aiSAAC", 17, 1);
-
-            testTH.SetAge(12);
+            // test input data
+            Console.WriteLine("<<<<<<<<<<TICKET HOLDER TESTING>>>>>>>>>");
+            TicketHolder testTH = new TicketHolder("Isaac", 12, 3);
 
             List<int> s = new List<int>() {1,0};
             List<int> sQ = new List<int>() {12,1};
@@ -28,8 +29,41 @@ namespace MovieFundraiserV1
 
             testTH.AddDrinks(d,dQ);
 
-            Console.WriteLine($"{testTH.GenerateReciept()}");
-            Console.WriteLine($"{testTH.CalculateTotalCost(snackPrices,drinkPrices)}");
+            testTH.SetCredit(true);
+
+            // output
+            Console.WriteLine($"{testTH.GenerateReciept(TICKETPRICE,snackPrices,drinkPrices,snacksAvailable,drinksAvailable)}");
+
+            //ticket manager test
+            Console.WriteLine("<<<<<<<<<<TICKET MANAGER TESTING>>>>>>>>>");
+
+            TicketManager tm = new TicketManager();
+
+            string name = "AIsaac";
+            int age = 13;
+            int tickets = 151;
+
+            if (tm.CheckAge(age))
+            {
+                if (tm.CheckAvailableSeats(tickets))
+                {
+                    tm.AddTicketHolder(new TicketHolder(name, age, tickets));
+                    Console.WriteLine($"Successfully purchased {tickets} tickets for {name}");
+                    Console.WriteLine($"there are now {tm.CalculateAvailableSeats()} Tickets available");
+                }
+                else
+                {
+                    Console.WriteLine($"there are only {tm.CalculateAvailableSeats()} Tickets available");
+                }
+            }
+            else
+            {
+                Console.WriteLine("You are too young to watch this movie");
+            }
+
+            tm.AddSnacksDrinksOrder(s, sQ, d, dQ);
+
+            Console.WriteLine($"{tm.TotalSnacksOrdered()}");
         }
     }
 }

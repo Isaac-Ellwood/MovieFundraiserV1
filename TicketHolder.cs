@@ -28,6 +28,36 @@ namespace MovieFundraiserV1
             this.numberTickets = numberTickets;
         }
 
+        //returns the value in the private tickets variable
+        public int GetTickets()
+        {
+            return this.numberTickets;
+        }
+
+        //returns snack order
+        public List<int> GetSnackOrder()
+        {
+            return snackOrder;
+        }
+
+        //returns snack quantity
+        public List<int> GetSnackQuantity()
+        {
+            return snackQuantity;
+        }
+
+        //returns drink order
+        public List<int> GetDrinkOrder()
+        {
+            return drinkOrder;
+        }
+
+        //returns drink quantity
+        public List<int> GetDrinkQuantity()
+        {
+            return drinkQuantity;
+        }
+
         //returns the value in the private age variable
         public int GetAge()
         {
@@ -62,7 +92,7 @@ namespace MovieFundraiserV1
         // returns string stating whether the ticket holder is paying cash or credit
         private string PaymentType()
         {
-            string paymentType = "credit";
+            string paymentType = "card";
             if (credit == false)
             {
                 paymentType = "cash";
@@ -117,7 +147,7 @@ namespace MovieFundraiserV1
             //loop through drink order and quanitity, drink, total item cost to summary
             for (int drinkIndex = 0; drinkIndex < drinkOrder.Count; drinkIndex++)
             {
-                summary += drinkQuantity[drinkIndex] + " x " + sAvailable[drinkOrder[drinkIndex]] + "\t$" + (drinkQuantity[drinkIndex] * sPrices[drinkOrder[drinkIndex]]) + "\n";
+                summary += drinkQuantity[drinkIndex] + " x " + dAvailable[drinkOrder[drinkIndex]] + "\t$" + (drinkQuantity[drinkIndex] * dPrices[drinkOrder[drinkIndex]]) + "\n";
             }
 
             return summary;
@@ -146,7 +176,7 @@ namespace MovieFundraiserV1
         private float CalculateSurcharge(List<float> sPrices, List<float> dPrices, float ticketPrice)
         {
             // calculates surcharge
-            float surcharge = CalculateTotalCost(sPrices, dPrices, ticketPrice) * 0.2f;
+            float surcharge = (float)Math.Round(CalculateTotalCost(sPrices, dPrices, ticketPrice) * 0.05f, 2);
 
             return surcharge;
         }
@@ -162,7 +192,13 @@ namespace MovieFundraiserV1
                 totalPayment += CalculateSurcharge(sPrices, dPrices, ticketPrice);
             }
 
-            return totalPayment;
+            return (float)Math.Round(totalPayment,2);
+        }
+
+        //returna a ticket summary string
+        private string TicketSummary(float ticketPrice)
+        {
+            return $"-----\n{numberTickets} x Tickets ${CalculateTicketCost(ticketPrice)}\n-----";
         }
 
         //return a summary of the total amount to be paid
@@ -172,17 +208,23 @@ namespace MovieFundraiserV1
         }
 
         //returns a string diaplaying the reciept for the puchased items
-        public string GenerateReciept()
+        public string GenerateReciept(float ticketPrice, List<float> sPrices, List<float> dPrices, List<string> sAvailable, List<string> dAvailable)
         {
+            string summary = $"Name: {name}\n" +
+                $"Age: {age}\n" +
+                $"Payment type: { PaymentType()}\n" +
+                $"{TicketSummary(ticketPrice)}\n" +
+                $"{SnackDrinkSummary(sPrices, dPrices, sAvailable, dAvailable)}\n" +
+                $"{SurchargeSummary(sPrices,dPrices,ticketPrice)}\n" +
+                $"{TotalPaymentSummary(sPrices,dPrices,ticketPrice)}";
 
-
-            return $"{PaymentType()}";
+            return summary;
         }
 
         // returns a string collating all the values stored in the private variables
         public override string ToString()
         {
-            return "";
+            return base.ToString();
         }
     }
 }
