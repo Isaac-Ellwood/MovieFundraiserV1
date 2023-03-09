@@ -28,6 +28,12 @@ namespace MovieFundraiserV1
 
         }
 
+        //return seat limit
+        public int GetSeatLimit()
+        {
+            return SEATLIMIT;
+        }
+
         //Adds a ticket holder into ticketHolders list
         public void AddTicketHolder(TicketHolder ticketHolder)
         {
@@ -37,8 +43,11 @@ namespace MovieFundraiserV1
         //stores the snacks and drinks ordered by the most recent ticket holder
         public void AddSnacksDrinksOrder(List<int> sOrder, List<int> sQuantity, List<int> dOrder, List<int> dQuantity)
         {
-            ticketHolders[ticketHolders.Count-1].AddSnacks(sOrder,sQuantity);
-            ticketHolders[ticketHolders.Count-1].AddSnacks(dOrder, dQuantity);
+            if ((ticketHolders.Count - 1) >= 0)
+            {
+                ticketHolders[ticketHolders.Count - 1].AddSnacks(sOrder, sQuantity);
+                ticketHolders[ticketHolders.Count - 1].AddDrinks(dOrder, dQuantity);
+            }
         }
 
         //returns true if purchasers age meets age requirements else it returns false
@@ -84,9 +93,9 @@ namespace MovieFundraiserV1
         }
 
         //sets new age limit
-        public void SetAgeLimit()
+        public void SetAgeLimit(int aLimit)
         {
-
+            ageLimit = aLimit;
         }
 
         //sets a new value to the ticket price
@@ -111,6 +120,23 @@ namespace MovieFundraiserV1
         private List<int> SumItemsSold(string itemType)
         {
             List<int>sumItemsSold = new List<int>();
+
+            if (itemType == "snacks")
+            {
+                foreach (string item in snacksAvailable)
+                {
+                    sumItemsSold.Add(0);
+                }
+            }
+            else
+            {
+                foreach (string item in drinksAvailable)
+                {
+                    sumItemsSold.Add(0);
+                }
+            }
+            
+
             foreach (TicketHolder ticketHolder in ticketHolders)
             {
                 List<int> orderedItems, itemQuantities = new List<int>();
@@ -274,7 +300,11 @@ namespace MovieFundraiserV1
         // returns a string collating all the values stored in the private variables
         public override string ToString()
         {
-            return base.ToString();
+            string toString = $"";
+
+            toString += ageLimit;
+
+            return toString;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace MovieFundraiserV1
 
             string name = "AIsaac";
             int age = 13;
-            int tickets = 151;
+            int tickets = 150;
 
             if (tm.CheckAge(age))
             {
@@ -62,6 +62,14 @@ namespace MovieFundraiserV1
             }
 
             tm.AddSnacksDrinksOrder(s, sQ, d, dQ);
+
+            //
+            Console.WriteLine("Age limits before change:\n" + tm.ToString());
+            tm.SetAgeLimit(16);
+            Console.WriteLine("Age limits after change:\n" + tm.ToString());
+
+            //
+            Console.WriteLine($"Total sold tickets: {tm.GetSeatLimit() - tm.CalculateAvailableSeats()}");
 
             Console.WriteLine($"{tm.TotalSnacksOrdered()}");
         }
